@@ -1,0 +1,10 @@
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+$('#year').textContent=new Date().getFullYear();
+const menu=$('#menu'),nav=$('#navlinks');menu.addEventListener('click',()=>{nav.classList.toggle('open');menu.setAttribute('aria-expanded',nav.classList.contains('open')?'true':'false')});
+$$('#navlinks a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
+const progress=$('#progress'),topbtn=$('#topbtn');window.addEventListener('scroll',()=>{const max=document.documentElement.scrollHeight-innerHeight;progress.style.width=(max?scrollY/max*100:0)+'%';topbtn.classList.toggle('show',scrollY>500)},{passive:true});topbtn.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');ro.unobserve(e.target)}}),{threshold:.12});$$('.reveal').forEach(el=>ro.observe(el));
+const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)$$('#navlinks a').forEach(a=>a.classList.toggle('active',a.hash==='#'+e.target.id))}),{rootMargin:'-25% 0px -60% 0px'});$$('main section[id]').forEach(s=>so.observe(s));
+$$('#tabs .tab').forEach(btn=>btn.addEventListener('click',()=>{$$('#tabs .tab').forEach(b=>b.classList.toggle('active',b===btn));const f=btn.dataset.filter;$$('.shot').forEach(s=>s.classList.toggle('hidden',f!=='all'&&s.dataset.category!==f))}));
+const lb=$('#lightbox'),li=$('#lightimg'),lt=$('#lighttitle');$$('.shot').forEach(card=>card.addEventListener('click',()=>{const im=$('img',card);li.src=im.src;li.alt=im.alt;lt.textContent=card.dataset.title;lb.classList.add('open');document.body.style.overflow='hidden';$('#closebox').focus()}));
+function closeLb(){lb.classList.remove('open');document.body.style.overflow=''}$('#closebox').addEventListener('click',closeLb);lb.addEventListener('click',e=>{if(e.target===lb)closeLb()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb()});
